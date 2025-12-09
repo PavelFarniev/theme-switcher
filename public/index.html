@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Переключатель темы</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light">
+
+<h1>Переключатель темы</h1>
+
+<button id="toggle-btn">Переключить тему</button>
+
+<script>
+    async function loadTheme() {
+        const res = await fetch('/api/theme');
+        const data = await res.json();
+        document.body.className = data.theme;
+    }
+
+    document.getElementById('toggle-btn').onclick = async () => {
+        const newTheme = document.body.className === "light" ? "dark" : "light";
+
+        await fetch('/api/theme', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ theme: newTheme })
+        });
+
+        document.body.className = newTheme;
+    };
+
+    loadTheme();
+</script>
+</body>
+</html>
